@@ -103,7 +103,7 @@
           "
           @click="createPassword"
         >
-          Generate Password
+          Generate nothing
         </button>
       </div>
     </div>
