@@ -7,34 +7,64 @@
       w-screen
       h-screen
       font-montserrat font-semibold
+      dark:bg-[#293241]
+      transition-all
+      duration-500
     "
   >
     <div
       class="
         bg-gray-50
+        dark:bg-[#293241]
         flex flex-col
-        rounded-md
+        justify-between
+        sm:rounded-md
         gap-2
         overflow-hidden
         shadow-2xl
+        dark:shadow-[0_0_10px_0.5px_rgba(255,255,255,0.3)]
+        transition-all
+        duration-500
+        w-full
+        h-full
+        sm:w-fit sm:h-fit
       "
     >
       <h1
         class="
-          text-white
-          dark:text-gray-700
-          text-5xl
+          text-white text-7xl
+          sm:text-5xl
           bg-burnt-sienna
-          p-4
+          sm:p-4
           font-bold
+          transition-all
+          duration-500
+          text-center
+          py-12
         "
       >
         Password Generator
       </h1>
-      <div class="p-3 flex flex-col gap-2">
+      <div class="flex flex-col gap-10 m-5 sm:p-3 sm:gap-2">
         <div
-          class="bg-white p-1 rounded-sm shadow-lg text-gray-500 transition-all"
-          :class="{ 'text-red-500 border border-red-500': error }"
+          class="
+            bg-white
+            dark:bg-[#374358]
+            p-5
+            sm:p-1
+            rounded-sm
+            shadow-lg
+            text-gray-600
+            transition-all
+            duration-500
+            text-2xl
+            sm:text-base
+          "
+          :class="{
+            'text-red-500 border border-red-500': error,
+            'text-black dark:text-white': passwordRendered,
+            'dark:text-gray-300': !passwordRendered,
+          }"
         >
           <h3 class="flex justify-between overflow-hidden" ref="genPassword">
             {{ password }}
@@ -45,7 +75,7 @@
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  class="h-8 w-8 sm:h-6 sm:w-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -63,19 +93,38 @@
         </div>
         <div class="p-2 flex justify-between appearance-none">
           <label
-            class="text-gray-400 transition-all"
-            :class="{ 'text-black': numOfChars }"
+            class="
+              text-gray-400
+              transition-all
+              duration-500
+              text-2xl
+              sm:text-base
+            "
+            :class="{ 'text-black dark:text-white': numOfChars }"
             for="characters"
             >Number of characters</label
           >
-          <select v-model="numOfChars" name="characters" id="characters">
+          <select
+            class="
+              font-bold
+              dark:bg-[#374358] dark:text-white
+              transition-all
+              duration-500
+              text-center text-lg
+              p-2
+              sm:text-base sm:p-0
+            "
+            v-model="numOfChars"
+            name="characters"
+            id="characters"
+          >
             <option value="">Please choose an option</option>
             <option v-for="option in options" :key="option" :value="option">
               {{ option }}
             </option>
           </select>
         </div>
-        <div class="grid grid-cols-2 grid-rows-2 p-1">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-0 p-1">
           <base-checkbox
             v-for="(state, name) in states"
             :key="state"
@@ -88,10 +137,12 @@
         <button
           class="
             w-full
-            p-2
-            rounded-sm
+            p-4
+            sm:p-2
+            rounded-md
             font-semibold
-            text-white text-3xl
+            text-white text-5xl
+            sm:text-3xl
             transition
             ease-in-out
             bg-burnt-sienna
@@ -132,18 +183,66 @@ export default {
       passwordRendered: false,
     };
   },
-  computed: {
-    // changeState(type, value) {
-    //   this.states[type] = value;
-    // },
-
-    passwordGenerator() {
-      return "DRIPAMASGERYWYUGREW";
-    },
-  },
+  computed: {},
   methods: {
-    creationPossible() {
+    passwordString() {
+      const smallChars = Array(26)
+        .fill(97)
+        .map((x, y) => String.fromCharCode(x + y));
+      const capChars = smallChars.map((x) => x.toUpperCase());
+      const numbers = [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3,
+        4, 5, 6, 7, 8, 9,
+      ];
+      const symbols = [
+        "-",
+        "_",
+        ".",
+        "-",
+        "_",
+        ".",
+        "-",
+        "_",
+        ".",
+        "-",
+        "_",
+        ".",
+        "-",
+        "_",
+        ".",
+        "-",
+        "_",
+        ".",
+        "-",
+        "_",
+        ".",
+      ];
+
+      const arr = [];
+      if (this.states.smallChars) {
+        smallChars.map((x) => arr.push(x));
+      }
+      if (this.states.capChars) {
+        capChars.map((x) => arr.push(x));
+      }
+      if (this.states.numbers) {
+        numbers.map((x) => arr.push(x));
+      }
+      if (this.states.symbols) {
+        symbols.map((x) => arr.push(x));
+      }
+
       console.log(this.states);
+      console.log(arr);
+
+      const finalPassword = [];
+      for (let i = 0; i < this.numOfChars; i++) {
+        finalPassword.push(arr[Math.floor(Math.random() * arr.length)]);
+      }
+
+      return finalPassword.toString().replaceAll(",", "");
+    },
+    creationPossible() {
       if (
         this.numOfChars &&
         (this.states.smallChars ||
@@ -151,10 +250,8 @@ export default {
           this.states.numbers ||
           this.states.symbols)
       ) {
-        console.log("it does work");
         this.error = false;
       } else {
-        console.log("it doesnt work");
         this.error = true;
       }
     },
@@ -174,11 +271,6 @@ export default {
       } else {
         console.warn("Could not select text in node: Unsupported browser.");
       }
-
-      // url.innerHTML = window.location.href;
-      // console.log(url.innerHTML);
-      // url.select();
-      // document.execCommand("copy");
     },
     copyToClipboard(text) {
       const elem = document.createElement("textarea");
@@ -188,24 +280,19 @@ export default {
       document.execCommand("copy");
       document.body.removeChild(elem);
     },
-    setState(e) {
-      this.states[e.id] = e.checked;
+    setState(payload) {
+      // console.log(payload);
+      this.states[payload.elName] = payload.state;
+      console.log(this.states);
     },
     createPassword() {
       this.passwordRendered = false;
       this.creationPossible();
-      console.log(this.error + 1);
 
       if (!this.error) {
         this.password = "Generating pasword...";
 
-        this.renderPassword("aglabagla", 1000);
-
-        // setInterval(() => {
-        //   this.password = this.passwordGenerator;
-        //   this.passwordRendered = true;
-        //   console.log("why");
-        // }, 2000);
+        this.renderPassword(this.passwordString(), 1000);
       } else {
         this.password =
           "Please choose at least one option and number of characters";
