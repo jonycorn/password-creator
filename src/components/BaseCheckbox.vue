@@ -13,13 +13,21 @@
     @click="emitChange"
   >
     <label
-      class="text-gray-400 transition-all duration-500 pointer-events-none"
-      :class="{ 'text-black dark:text-white': curState }"
+      class="transition-all duration-500 pointer-events-none"
+      :class="{
+        'text-black dark:text-white': curState,
+        'text-gray-400': !curState,
+      }"
       :for="checkType"
     >
       {{ declareName }}</label
     >
-    <input v-model="curState" :id="checkType" type="checkbox" />
+    <input
+      class="bg-violet-500"
+      v-model="curState"
+      :id="checkType"
+      type="checkbox"
+    />
   </div>
 </template>
 

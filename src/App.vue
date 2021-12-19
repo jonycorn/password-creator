@@ -45,7 +45,7 @@
       >
         Password Generator
       </h1>
-      <div class="flex flex-col gap-10 m-5 sm:p-3 sm:gap-2">
+      <div class="flex flex-col gap-10 py-5 px-5 sm:p-3 sm:gap-2">
         <div
           class="
             bg-white
@@ -93,14 +93,11 @@
         </div>
         <div class="p-2 flex justify-between appearance-none">
           <label
-            class="
-              text-gray-400
-              transition-all
-              duration-500
-              text-2xl
-              sm:text-base
-            "
-            :class="{ 'text-black dark:text-white': numOfChars }"
+            class="transition-all duration-500 text-2xl sm:text-base"
+            :class="{
+              'text-black dark:text-white': numOfChars,
+              'text-gray-400': !numOfChars,
+            }"
             for="characters"
             >Number of characters</label
           >
@@ -169,10 +166,10 @@ export default {
   data() {
     return {
       options: Array.from({ length: 20 }, (_, i) => i + 1),
-      numOfChars: 10,
+      numOfChars: 0,
 
       states: {
-        smallChars: true,
+        smallChars: false,
         capChars: false,
         numbers: false,
         symbols: false,
@@ -232,9 +229,6 @@ export default {
         symbols.map((x) => arr.push(x));
       }
 
-      console.log(this.states);
-      console.log(arr);
-
       const finalPassword = [];
       for (let i = 0; i < this.numOfChars; i++) {
         finalPassword.push(arr[Math.floor(Math.random() * arr.length)]);
@@ -269,7 +263,7 @@ export default {
         selection.removeAllRanges();
         selection.addRange(range);
       } else {
-        console.warn("Could not select text in node: Unsupported browser.");
+        console.error("Could not select text in node: Unsupported browser.");
       }
     },
     copyToClipboard(text) {
@@ -281,9 +275,7 @@ export default {
       document.body.removeChild(elem);
     },
     setState(payload) {
-      // console.log(payload);
       this.states[payload.elName] = payload.state;
-      console.log(this.states);
     },
     createPassword() {
       this.passwordRendered = false;
