@@ -16,7 +16,7 @@
         rounded-md
         gap-2
         overflow-hidden
-        shadow-lg
+        shadow-2xl
       "
     >
       <h1
@@ -24,10 +24,9 @@
           text-white
           dark:text-gray-700
           text-5xl
-          bg-gradient-to-r
-          from-violet-500
-          to-fuchsia-500
-          p-5
+          bg-burnt-sienna
+          p-4
+          font-bold
         "
       >
         Password Generator
@@ -39,7 +38,7 @@
         >
           <h3 class="flex justify-between overflow-hidden" ref="genPassword">
             {{ password }}
-            <transition name="copy">
+            <transition v-if="!error" name="copy">
               <button
                 @click="copyToClipboard(password)"
                 v-if="passwordRendered"
@@ -95,15 +94,15 @@
             text-white text-3xl
             transition
             ease-in-out
-            bg-fuchsia-500
-            hover:-translate-y-[2px] hover:bg-violet-500
+            bg-burnt-sienna
+            hover:-translate-y-[2px] hover:bg-[#B45C4A]
             active:translate-y-[2px]
             duration-300
             mt-6
           "
           @click="createPassword"
         >
-          Generate nothing
+          Generate Password
         </button>
       </div>
     </div>
@@ -144,6 +143,7 @@ export default {
   },
   methods: {
     creationPossible() {
+      console.log(this.states);
       if (
         this.numOfChars &&
         (this.states.smallChars ||
@@ -151,8 +151,10 @@ export default {
           this.states.numbers ||
           this.states.symbols)
       ) {
+        console.log("it does work");
         this.error = false;
       } else {
+        console.log("it doesnt work");
         this.error = true;
       }
     },
@@ -192,13 +194,12 @@ export default {
     createPassword() {
       this.passwordRendered = false;
       this.creationPossible();
-      console.log(this.error);
+      console.log(this.error + 1);
 
       if (!this.error) {
-        this.error = false;
         this.password = "Generating pasword...";
 
-        this.renderPassword("aglabagla", 3000);
+        this.renderPassword("aglabagla", 1000);
 
         // setInterval(() => {
         //   this.password = this.passwordGenerator;
@@ -206,13 +207,12 @@ export default {
         //   console.log("why");
         // }, 2000);
       } else {
-        this.error = true;
         this.password =
           "Please choose at least one option and number of characters";
       }
     },
     renderPassword(pass, time) {
-      setInterval(() => {
+      setTimeout(() => {
         this.password = pass;
         this.passwordRendered = true;
       }, time);
