@@ -266,7 +266,7 @@ export default {
         selection.removeAllRanges();
         selection.addRange(range);
       } else {
-        console.warn("Could not select text in node: Unsupported browser.");
+        console.error("Could not select text in node: Unsupported browser.");
       }
     },
     copyToClipboard(text) {
