@@ -8,7 +8,7 @@ module.exports = {
     },
     extend: {
       colors: {
-        "gray-light": "#d3dce6",
+        "burnt-sienna": "#EE6C4D",
       },
     },
   },
