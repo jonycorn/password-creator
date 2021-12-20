@@ -72,9 +72,9 @@
             'dark:text-gray-300': !passwordRendered,
           }"
         >
-          <h3 class="" ref="genPassword">
+          <h2 class="" ref="genPassword">
             {{ password }}
-          </h3>
+          </h2>
           <transition v-if="!error" name="copy">
             <button @click="copyToClipboard(password)" v-if="passwordRendered">
               <svg
