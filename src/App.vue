@@ -5,7 +5,8 @@
       justify-center
       items-center
       w-screen
-      h-screen
+      h-full
+      sm:h-screen
       font-montserrat font-semibold
       dark:bg-[#293241]
       transition-all
@@ -14,15 +15,15 @@
   >
     <div
       class="
-        bg-gray-50
+        bg-white
+        sm:bg-gray-50
         dark:bg-[#293241]
         flex flex-col
         justify-between
         sm:rounded-md
         gap-2
         overflow-hidden
-        shadow-2xl
-        dark:shadow-[0_0_10px_0.5px_rgba(255,255,255,0.3)]
+        sm:shadow-2xl sm:dark:shadow-[0_0_10px_0.5px_rgba(255,255,255,0.3)]
         transition-all
         duration-500
         w-full
@@ -32,8 +33,7 @@
     >
       <h1
         class="
-          text-white text-7xl
-          sm:text-5xl
+          text-white text-5xl
           bg-burnt-sienna
           sm:p-4
           font-bold
@@ -57,8 +57,14 @@
             text-gray-600
             transition-all
             duration-500
-            text-2xl
+            text-lg
+            xs:text-2xl
             sm:text-base
+            flex
+            justify-between
+            align-center
+            overflow-hidden
+            break-words
           "
           :class="{
             'text-red-500 border border-red-500': error,
@@ -66,41 +72,51 @@
             'dark:text-gray-300': !passwordRendered,
           }"
         >
-          <h3 class="flex justify-between overflow-hidden" ref="genPassword">
+          <h3 class="" ref="genPassword">
             {{ password }}
-            <transition v-if="!error" name="copy">
-              <button
-                @click="copyToClipboard(password)"
-                v-if="passwordRendered"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-8 w-8 sm:h-6 sm:w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                  />
-                </svg>
-              </button>
-            </transition>
           </h3>
+          <transition v-if="!error" name="copy">
+            <button @click="copyToClipboard(password)" v-if="passwordRendered">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="
+                  h-7
+                  w-7
+                  active:h-6 active:w-6
+                  xs:h-8 xs:w-8 xs:active:h-7 xs:active:w-7
+                  sm:h-6 sm:w-6 sm:active:h-5 sm:active:w-5
+                  transition-all
+                "
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+              </svg>
+            </button>
+          </transition>
         </div>
-        <div class="p-2 flex justify-between appearance-none">
+        <div
+          class="
+            p-2
+            flex flex-col
+            items-center
+            gap-2
+            xs:gap-0 xs:flex-row xs:justify-between
+            appearance-none
+          "
+        >
           <label
-            class="
-              text-gray-400
-              transition-all
-              duration-500
-              text-2xl
-              sm:text-base
-            "
-            :class="{ 'text-black dark:text-white': numOfChars }"
+            class="transition-[color] duration-500 font-semibold"
+            :class="{
+              'text-black dark:text-white font-bold': numOfChars,
+              'text-gray-400': !numOfChars,
+            }"
             for="characters"
             >Number of characters</label
           >
@@ -110,9 +126,11 @@
               dark:bg-[#374358] dark:text-white
               transition-all
               duration-500
-              text-center text-lg
-              p-2
-              sm:text-base sm:p-0
+              px-10
+              py-4
+              xs:p-2
+              sm:p-1
+              text-sm text-center
             "
             v-model="numOfChars"
             name="characters"
@@ -124,14 +142,14 @@
             </option>
           </select>
         </div>
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-0 p-1">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-0 p-1">
           <base-checkbox
             v-for="(state, name) in states"
             :key="state"
             :checkType="name"
             :checkName="name"
             :checkState="state"
-            @drip="setState"
+            @stateChange="setState"
           ></base-checkbox>
         </div>
         <button
@@ -146,7 +164,7 @@
             transition
             ease-in-out
             bg-burnt-sienna
-            hover:-translate-y-[2px] hover:bg-[#B45C4A]
+            hover:-translate-y-[2px] hover:bg-[#D1644C]
             active:translate-y-[2px]
             duration-300
             mt-6
@@ -169,10 +187,10 @@ export default {
   data() {
     return {
       options: Array.from({ length: 20 }, (_, i) => i + 1),
-      numOfChars: 10,
+      numOfChars: "",
 
       states: {
-        smallChars: true,
+        smallChars: false,
         capChars: false,
         numbers: false,
         symbols: false,
@@ -190,33 +208,8 @@ export default {
         .fill(97)
         .map((x, y) => String.fromCharCode(x + y));
       const capChars = smallChars.map((x) => x.toUpperCase());
-      const numbers = [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3,
-        4, 5, 6, 7, 8, 9,
-      ];
-      const symbols = [
-        "-",
-        "_",
-        ".",
-        "-",
-        "_",
-        ".",
-        "-",
-        "_",
-        ".",
-        "-",
-        "_",
-        ".",
-        "-",
-        "_",
-        ".",
-        "-",
-        "_",
-        ".",
-        "-",
-        "_",
-        ".",
-      ];
+      const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const symbols = ["-", "_", ".", "%", "$", "#", "@", "!", "*"];
 
       const arr = [];
       if (this.states.smallChars) {
@@ -226,10 +219,14 @@ export default {
         capChars.map((x) => arr.push(x));
       }
       if (this.states.numbers) {
-        numbers.map((x) => arr.push(x));
+        for (let i = 0; i < 3; i++) {
+          numbers.map((x) => arr.push(x));
+        }
       }
       if (this.states.symbols) {
-        symbols.map((x) => arr.push(x));
+        for (let i = 0; i < 3; i++) {
+          symbols.map((x) => arr.push(x));
+        }
       }
 
       const finalPassword = [];
@@ -283,6 +280,11 @@ export default {
     createPassword() {
       this.passwordRendered = false;
       this.creationPossible();
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
 
       if (!this.error) {
         this.password = "Generating pasword...";
