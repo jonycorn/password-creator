@@ -3,6 +3,7 @@
     class="
       flex
       justify-between
+      items-center
       appearance-none
       p-4
       sm:p-2
