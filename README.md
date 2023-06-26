@@ -1,7 +1,3 @@
-# Vue 3 + Vite
+# Basic password creator app with options and breakpoints for responsibility
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-## Recommended IDE Setup
-
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+Made by using simple components in Vue.js this app brings a fluid user experience with usability to a great extent with the modern need for better security, It features also a set of option to tinker the password generator to anyone's needs.
